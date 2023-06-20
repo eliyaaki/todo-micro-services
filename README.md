@@ -18,6 +18,15 @@ The app relies on the following technologies and tools:
 
 2. **Kafka and Zookeeper:** Kafka is a distributed streaming platform, and Zookeeper is used as the coordination service for Kafka. They are used for event-driven communication between the microservices.
 
+## Testing
+
+The Todo Backend Service and Notification Backend Service have been thoroughly tested using Jest, a popular JavaScript testing framework. The tests cover various scenarios and ensure the functionality and reliability of the services.
+The test execution is facilitated through dedicated Dockerfiles for each service. These Dockerfiles include the necessary configurations to run the tests as part of the service startup process.
+Feel free to explore the test files located in the corresponding service directories to gain further insights into the test cases and assertions.
+You can also run the tests for the Todo Backend Service or the Notification Backend Service individually. To do so, navigate to the respective service directory and run the following command:
+
+       $ npm test
+
 ## Usage
 
 To run the Todo Microservices app locally, follow these steps:
@@ -30,6 +39,6 @@ To run the Todo Microservices app locally, follow these steps:
 
 4. Run the following command to start the services:
 
-   ```shell
-   docker-compose up
+  ```shell
+ docker-compose up
 
