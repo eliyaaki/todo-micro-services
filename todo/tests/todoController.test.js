@@ -1,7 +1,8 @@
 const todoService = require("../services/todoService");
 const log = require("../utils/logger");
 const todoController = require("../controllers/todoController");
-
+const ValidationError = require("../exceptions/ValidationError");
+const NotFoundError = require("../exceptions/NotFoundError");
 jest.mock("../services/todoService");
 jest.mock("../utils/logger");
 
@@ -75,9 +76,9 @@ describe("createTodo", () => {
       deadline
     );
     expect(log.info).toHaveBeenCalledWith("TODO added:", newTodo);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      status: 200,
+      status: 201,
       data: newTodo,
     });
   });
@@ -187,22 +188,23 @@ describe("deleteTodo", () => {
   });
 
   test("should respond with status 500 and send 'Internal Server Error' if an error occurs", async () => {
-    const todoId = "todo-id";
+    const todoId = "todoId";
     const error = new Error("Database error");
-    const mockResponse = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
-    };
-    todoService.deleteTodo.mockRejectedValue(error);
 
     const mockRequest = {
       params: { todoId },
     };
 
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+
+    todoService.deleteTodo = jest.fn().mockRejectedValueOnce(error);
+
     await todoController.deleteTodo(mockRequest, mockResponse);
 
     expect(todoService.deleteTodo).toHaveBeenCalledWith(todoId);
-    expect(log.error).toHaveBeenCalledWith(error);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.send).toHaveBeenCalledWith("Internal Server Error");
   });

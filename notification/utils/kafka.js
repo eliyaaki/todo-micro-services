@@ -10,7 +10,7 @@ const kafka = new Kafka({
   brokers: [KAFKA_BROKERS],
   connectionTimeout: 10000,
   retry: {
-    retries: 5, // Number of connection attempts
+    retries: 10, // Number of connection attempts
     maxRetryTime: 5000, // Maximum time between retries in milliseconds
   },
 });

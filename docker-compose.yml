@@ -32,8 +32,6 @@ services:
     build:
       context: ./todo
       dockerfile: Dockerfile
-    # networks:
-    #   - todo-network
     ports:
       - "3000:3000"
     environment:
@@ -48,8 +46,6 @@ services:
     build:
       context: ./notification
       dockerfile: Dockerfile
-    # networks:
-    #   - todo-network
     environment:
       - KAFKA_BROKERS=kafka:9092
     depends_on:
@@ -62,16 +58,12 @@ services:
       dockerfile: Dockerfile
     environment:
       - TODO_BASE_URL=http://todo-app:3000
-    # networks:
-    #   - todo-network
     ports:
       - "5173:5173"
     expose:
       - "5173"
     depends_on:
       - todo-app
-
-# networks:
-#   todo-network:
+    restart: unless-stopped
 volumes:
   mongodb-data:

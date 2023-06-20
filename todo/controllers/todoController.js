@@ -1,6 +1,7 @@
 const todoService = require("../services/todoService");
 const log = require("../utils/logger");
-
+const ValidationError = require("../exceptions/ValidationError");
+const NotFoundError = require("../exceptions/NotFoundError");
 async function getAllTodos(req, res) {
   try {
     const todos = await todoService.getAllTodos();
@@ -17,10 +18,15 @@ async function createTodo(req, res) {
   try {
     const newTodo = await todoService.createTodo(title, description, deadline);
     log.info("TODO added:", newTodo);
-    return res.status(200).json({ status: 200, data: newTodo });
+    return res.status(201).json({ status: 201, data: newTodo });
   } catch (error) {
     log.error(error);
-    res.status(500).send("Internal Server Error");
+
+    if (error instanceof ValidationError) {
+      return res.status(400).json({ error: error.message });
+    } else {
+      return res.status(500).send("Internal Server Error");
+    }
   }
 }
 
@@ -34,7 +40,14 @@ async function updateTodo(req, res) {
     return res.status(200).json({ status: 200, data: todo });
   } catch (error) {
     log.error(error);
-    res.status(500).send("Internal Server Error");
+
+    if (error instanceof ValidationError) {
+      return res.status(400).json({ error: error.message });
+    } else if (error instanceof NotFoundError) {
+      return res.status(404).json({ error: error.message });
+    } else {
+      return res.status(500).send("Internal Server Error");
+    }
   }
 }
 
@@ -45,8 +58,13 @@ async function deleteTodo(req, res) {
     log.info("TODO deleted");
     return res.status(204).send("Todo deleted successfully");
   } catch (error) {
-    log.error(error);
-    res.status(500).send("Internal Server Error");
+    if (error instanceof ValidationError) {
+      return res.status(400).json({ error: error.message });
+    } else if (error instanceof NotFoundError) {
+      return res.status(404).json({ error: error.message });
+    } else {
+      return res.status(500).send("Internal Server Error");
+    }
   }
 }
 
