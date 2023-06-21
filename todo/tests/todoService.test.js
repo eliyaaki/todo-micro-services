@@ -38,7 +38,7 @@ describe("validateDate", () => {
   });
 
   test("should return the provided deadline if it is a valid future date", async () => {
-    const deadline = "2023-06-21T10:00:00";
+    const deadline = "2030-06-21T10:00:00";
     const result = await todoService.validateDate(deadline);
 
     expect(log.info).toHaveBeenCalledWith(`original deadline: ${deadline}`);
@@ -83,7 +83,7 @@ describe("createTodo", () => {
   test("should create a new todo and send a message to Kafka", async () => {
     const title = "Test Todo";
     const description = "Test Description";
-    const deadline = "2023-06-21T10:00:00";
+    const deadline = "2030-06-21T10:00:00";
     const deadlineConversion = new Date(deadline);
     const mockNewTodo = { title, description, deadlineConversion };
 
@@ -140,7 +140,7 @@ describe("createTodo", () => {
   test("should throw an error if an error occurs during todo creation", async () => {
     const title = "Test Todo";
     const description = "Test Description";
-    const deadline = "2023-06-21T07:00:00";
+    const deadline = "2030-06-21T07:00:00";
     const deadlineConversion = new Date(deadline);
     const error = new Error("Error occurred during todo creation");
 
@@ -245,7 +245,7 @@ describe("updateTodo", () => {
     const updatedTodo = {
       title: "Updated Todo",
       description: "Updated description",
-      deadline: "2023-06-21T10:00:00",
+      deadline: "2030-06-21T10:00:00",
     };
     const deadline = "2023-06-21T10:00:00";
     const mockTodo = { _id: todoId };
